@@ -1,10 +1,22 @@
 import { useState } from 'react';
-import { Box, Button, TextField, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  Tab,
+  Tabs,
+  TextField,
+  Typography,
+} from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [activeTab, setActiveTab] = useState(0);
   const navigate = useNavigate();
 
   const handleSubmit = e => {
@@ -15,6 +27,10 @@ export default function Login() {
     } else {
       console.log('Credenciales incorrectas');
     }
+  };
+
+  const handleChangeTab = (e, newValue) => {
+    setActiveTab(newValue);
   };
 
   return (
@@ -54,38 +70,95 @@ export default function Login() {
               borderTopRightRadius: '32px',
               padding: '2rem',
             }}>
-            <Typography variant='h5' gutterBottom>
-              Login
-            </Typography>
-            <form onSubmit={handleSubmit}>
-              <TextField
-                label='Correo electrónico'
-                fullWidth
-                margin='normal'
-                variant='outlined'
-                type='email'
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-              />
-              <TextField
-                label='Contraseña'
-                fullWidth
-                margin='normal'
-                variant='outlined'
-                type='password'
-                value={password}
-                onChange={e => setPassword(e.target.value)}
-              />
-              <Button
-                type='submit'
-                onClick={handleSubmit}
-                variant='contained'
-                color='primary'
-                fullWidth
-                sx={{ marginTop: '2rem' }}>
-                Ingresar
-              </Button>
-            </form>
+            <Tabs value={activeTab} onChange={handleChangeTab} centered>
+              <Tab label='Login' />
+              <Tab label='Registro' />
+            </Tabs>
+            {activeTab === 0 && (
+              <form onSubmit={handleSubmit} style={{ width: '100%' }}>
+                <TextField
+                  label='Correo electrónico'
+                  fullWidth
+                  margin='normal'
+                  variant='outlined'
+                  type='email'
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                />
+                <TextField
+                  label='Contraseña'
+                  fullWidth
+                  margin='normal'
+                  variant='outlined'
+                  type='password'
+                  value={password}
+                  onChange={e => setPassword(e.target.value)}
+                />
+                <Button
+                  type='submit'
+                  variant='contained'
+                  color='primary'
+                  fullWidth
+                  sx={{ marginTop: '2rem' }}>
+                  Ingresar
+                </Button>
+              </form>
+            )}
+
+            {activeTab === 1 && (
+              <form onSubmit={handleSubmit} style={{ width: '100%' }}>
+                <TextField
+                  label='Nombre'
+                  fullWidth
+                  margin='normal'
+                  variant='outlined'
+                />
+                <TextField
+                  label='Apellido'
+                  fullWidth
+                  margin='normal'
+                  variant='outlined'
+                />
+                <TextField
+                  label='Correo electrónico'
+                  fullWidth
+                  margin='normal'
+                  variant='outlined'
+                  type='email'
+                />
+                <TextField
+                  label='Teléfono'
+                  fullWidth
+                  margin='normal'
+                  variant='outlined'
+                />
+                <TextField
+                  label='Contraseña'
+                  fullWidth
+                  margin='normal'
+                  variant='outlined'
+                />
+                <FormControl fullWidth margin='normal'>
+                  <InputLabel id='genero-label'>Género</InputLabel>
+                  <Select
+                    labelId='genero-label'
+                    id='genero-select'
+                    label='Género'>
+                    <MenuItem value='masculino'>Masculino</MenuItem>
+                    <MenuItem value='femenino'>Femenino</MenuItem>
+                    <MenuItem value='otro'>Otro</MenuItem>
+                  </Select>
+                </FormControl>
+                <Button
+                  type='submit'
+                  variant='contained'
+                  color='primary'
+                  fullWidth
+                  sx={{ marginTop: '2rem' }}>
+                  Registrarse
+                </Button>
+              </form>
+            )}
           </Box>
         </Box>
       </Box>
