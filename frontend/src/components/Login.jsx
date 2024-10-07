@@ -1,6 +1,22 @@
+import { useState } from 'react';
 import { Box, Button, TextField, Typography } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
-export default function login() {
+export default function Login() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const navigate = useNavigate();
+
+  const handleSubmit = e => {
+    e.preventDefault();
+
+    if (email === 'administrator@admi.com' && password === 'admi') {
+      navigate('/dashboard');
+    } else {
+      console.log('Credenciales incorrectas');
+    }
+  };
+
   return (
     <Box>
       <Box
@@ -41,13 +57,15 @@ export default function login() {
             <Typography variant='h5' gutterBottom>
               Login
             </Typography>
-            <form>
+            <form onSubmit={handleSubmit}>
               <TextField
                 label='Correo electrónico'
                 fullWidth
                 margin='normal'
                 variant='outlined'
                 type='email'
+                value={email}
+                onChange={e => setEmail(e.target.value)}
               />
               <TextField
                 label='Contraseña'
@@ -55,8 +73,12 @@ export default function login() {
                 margin='normal'
                 variant='outlined'
                 type='password'
+                value={password}
+                onChange={e => setPassword(e.target.value)}
               />
               <Button
+                type='submit'
+                onClick={handleSubmit}
                 variant='contained'
                 color='primary'
                 fullWidth
