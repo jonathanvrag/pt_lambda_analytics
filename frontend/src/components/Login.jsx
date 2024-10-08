@@ -39,12 +39,21 @@ export default function Login() {
   const handleSubmit = async e => {
     e.preventDefault();
 
-    const loginSuccess = await auth.login(email, password);
+    try {
+      const loginSuccess = await auth.login(email, password);
 
-    if (loginSuccess) {
-      navigate('/dashboard');
-    } else {
-      console.log('Credenciales incorrectas');
+      if (loginSuccess) {
+        navigate('/dashboard');
+      } else {
+        setSnackbarSeverity('error');
+        setSnackbarMessage(loginSuccess.message);
+        setSnackbarOpen(true);
+      }
+    } catch (error) {
+      console.error('Error en el inicio de sesión:', error);
+      setSnackbarSeverity('error');
+      setSnackbarMessage(error.message);
+      setSnackbarOpen(true);
     }
   };
 
@@ -68,34 +77,17 @@ export default function Login() {
     }
 
     try {
-      const response = await auth.register(newUserData);
+      const registerSuccess = await auth.register(newUserData);
 
-      if (response.ok) {
-        console.log('Usuario registrado exitosamente:', response.data);
-        setSnackbarSeverity('success');
-        setSnackbarMessage('Usuario registrado exitosamente.');
-        setSnackbarOpen(true);
-        navigate('/');
-      } else {
-        const errorData = await response.json();
-        setSnackbarSeverity('error');
-        if (errorData.email) {
-          setSnackbarMessage(`Error: El correo ya existe`);
-        } else if (errorData.password) {
-          setSnackbarMessage(`Error: ${errorData.password[0]}`);
-        } else {
-          setSnackbarMessage(
-            'Error en el registro. Por favor, inténtalo de nuevo.'
-          );
-        }
-        setSnackbarOpen(true);
-      }
+      console.log('Usuario registrado exitosamente:', registerSuccess.data);
+      setSnackbarSeverity('success');
+      setSnackbarMessage('Usuario registrado exitosamente.');
+      setSnackbarOpen(true);
+      navigate('/');
     } catch (error) {
-      console.log('El registro falló:', error);
+      console.error('El registro falló:', error);
       setSnackbarSeverity('error');
-      setSnackbarMessage(
-        'Error en el registro. Por favor, inténtalo de nuevo.'
-      );
+      setSnackbarMessage(error);
       setSnackbarOpen(true);
     }
   };

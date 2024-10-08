@@ -10,6 +10,13 @@ class UserRegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserCreateSerializer
 
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 class UserLoginView(generics.GenericAPIView):
     serializer_class = UserCreateSerializer
 
@@ -22,7 +29,7 @@ class UserLoginView(generics.GenericAPIView):
 
         try:
             user = User.objects.get(email=email)
-            if not user.estado:
+            if not user.is_active:
                 return Response({'error': 'Usuario inactivo'}, status=status.HTTP_400_BAD_REQUEST)
             if not user.check_password(password):
                 return Response({'error': 'Contraseña incorrecta'}, status=status.HTTP_400_BAD_REQUEST)

@@ -34,8 +34,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
     telefono = models.CharField(max_length=15, blank=True, null=True)
     genero = models.CharField(max_length=10, choices=GENERO_CHOICES, blank=True, null=True)
-    rol = models.CharField(max_length=10, choices=ROL_CHOICES)
-    estado = models.BooleanField(default=True)
+    rol = models.CharField(max_length=10, choices=ROL_CHOICES, null=True, blank=True)
+    is_staff = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['nombre', 'apellido']

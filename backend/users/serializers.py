@@ -6,12 +6,12 @@ from django.contrib.auth.password_validation import validate_password
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'nombre', 'apellido', 'email', 'telefono', 'genero', 'rol', 'estado']
+        fields = ['id', 'nombre', 'apellido', 'email', 'telefono', 'genero', 'rol', 'is_active']
 
 class UserCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['nombre', 'apellido', 'email', 'telefono', 'genero', 'password', 'rol']
+        fields = ['nombre', 'apellido', 'email', 'telefono', 'genero', 'password', 'rol', 'is_active']
         extra_kwargs = {'password': {'write_only': True}}
 
     def validate_email(self, value):
@@ -33,7 +33,8 @@ class UserCreateSerializer(serializers.ModelSerializer):
             email=validated_data['email'],
             telefono=validated_data['telefono'],
             genero=validated_data['genero'],
-            rol=validated_data.get('rol', 'user')
+            rol=validated_data.get('rol', 'user'),
+            is_active=validated_data.get('is_active', True),
         )
         user.set_password(validated_data['password'])
         user.save()

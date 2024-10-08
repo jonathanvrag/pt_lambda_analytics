@@ -13,7 +13,7 @@ const login = async (email, password) => {
 
     if (!response.ok) {
       const errorData = await response.json();
-      throw new Error(errorData.detail || 'Error en el inicio de sesión');
+      throw new Error(errorData.error);
     }
 
     const data = await response.json();
@@ -26,7 +26,7 @@ const login = async (email, password) => {
     return true;
   } catch (error) {
     console.error('Error en el inicio de sesión:', error);
-    return false;
+    throw error;
   }
 };
 
@@ -42,7 +42,8 @@ const register = async userData => {
 
     if (!response.ok) {
       const errorData = await response.json();
-      throw new Error(errorData.detail || 'Error en el registro');
+      console.log(errorData)
+      throw new Error(errorData);
     }
 
     const registeredUser = await response.json();
