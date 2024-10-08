@@ -1,7 +1,40 @@
-from django.contrib.auth.models import User
 from rest_framework import serializers
+from .models import User
+from django.core.exceptions import ValidationError
+from django.contrib.auth.password_validation import validate_password
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'username', 'email']
+        fields = ['id', 'nombre', 'apellido', 'email', 'telefono', 'genero', 'rol', 'estado']
+
+class UserCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['nombre', 'apellido', 'email', 'telefono', 'genero', 'password', 'rol']
+        extra_kwargs = {'password': {'write_only': True}}
+
+    def validate_email(self, value):
+        if User.objects.filter(email=value).exists():
+            raise serializers.ValidationError("Ya existe un usuario con este correo electrónico.")
+        return value
+
+    def validate_password(self, value):
+        try:
+            validate_password(value)
+        except ValidationError as e:
+            raise serializers.ValidationError(e.messages)
+        return value
+
+    def create(self, validated_data):
+        user = User(
+            nombre=validated_data['nombre'],
+            apellido=validated_data['apellido'],
+            email=validated_data['email'],
+            telefono=validated_data['telefono'],
+            genero=validated_data['genero'],
+            rol=validated_data.get('rol', 'user')
+        )
+        user.set_password(validated_data['password'])
+        user.save()
+        return user

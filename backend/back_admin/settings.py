@@ -40,12 +40,13 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'users',
+    "corsheaders",
 ]
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
+    'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ],
+    ),
 }
 
 MIDDLEWARE = [
@@ -56,7 +57,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
 ]
+
+AUTH_USER_MODEL = 'users.User'
 
 ROOT_URLCONF = 'back_admin.urls'
 
@@ -78,6 +82,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'back_admin.wsgi.application'
 
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:5173',
+]
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
