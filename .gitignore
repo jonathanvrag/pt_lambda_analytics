@@ -1,1 +1,23 @@
-.venv
+# Node.js
+node_modules/
+.npm/
+.pnp.*
+
+# Django
+*.pyc
+__pycache__/
+local_settings.py
+db.sqlite3
+media
+.pytest_cache/
+
+# Entornos virtuales
+.venv/
+env/
+venv/
+ENV/
+
+# Otros
+.env*
+logs
+*.log
