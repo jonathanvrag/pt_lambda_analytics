@@ -39,3 +39,23 @@ class UserCreateSerializer(serializers.ModelSerializer):
         user.set_password(validated_data['password'])
         user.save()
         return user
+
+class UpdateUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'email']
+
+    user_id = serializers.PrimaryKeyRelatedField(
+        queryset=User.objects.all(), 
+        source='id',
+        write_only=True,
+        error_messages={'does_not_exist': 'Usuario no encontrado.'}
+    )
+    username = serializers.CharField(required=False)
+    email = serializers.EmailField(required=False)
+
+    def update(self, instance, validated_data):
+        """Actualiza el usuario con los datos validados."""
+        instance.email = validated_data.get('email', instance.email)
+        instance.save()
+        return instance

@@ -3,8 +3,15 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import get_user_model
 from .serializers import UserSerializer, UserCreateSerializer
+from rest_framework.permissions import BasePermission
+from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
 
 User = get_user_model()
+
+class IsOtherSuperUser(BasePermission):
+    def has_permission(self, request, view):
+        return bool(request.user and request.user.is_staff)
 
 class UserRegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
@@ -63,3 +70,26 @@ class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
             raise serializers.ValidationError('Un administrador no puede desactivarse a sí mismo.')
         instance.estado = False  # Desactivar en lugar de eliminar
         instance.save()
+
+class UpdateUserAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def put(self, request, *args, **kwargs):
+        try:
+            body_user_id = request.data.get('id')
+            if not body_user_id:
+                return Response({'error': 'User ID is required.'}, status=status.HTTP_400_BAD_REQUEST)
+
+            body_user = User.objects.get(id=body_user_id)
+        except User.DoesNotExist:
+            return Response({'error': 'User not found.'}, status=status.HTTP_404_NOT_FOUND)
+        except KeyError:
+            return Response({'error': 'Invalid request body.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        if request.user == body_user:
+            return Response({'error': 'You cannot update your user\'s data.'}, status=status.HTTP_403_FORBIDDEN)
+
+        body_user.email = request.data.get('email', body_user.email)
+        body_user.save()
+
+        return Response({'message': 'User updated successfully.'}, status=status.HTTP_200_OK)

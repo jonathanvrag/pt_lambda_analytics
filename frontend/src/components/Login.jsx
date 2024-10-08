@@ -43,7 +43,7 @@ export default function Login() {
       const loginSuccess = await auth.login(email, password);
 
       if (loginSuccess) {
-        navigate('/dashboard');
+        navigate('/usersList');
       } else {
         setSnackbarSeverity('error');
         setSnackbarMessage(loginSuccess.message);
@@ -83,7 +83,7 @@ export default function Login() {
       setSnackbarSeverity('success');
       setSnackbarMessage('Usuario registrado exitosamente.');
       setSnackbarOpen(true);
-      navigate('/');
+      navigate('/login');
     } catch (error) {
       console.error('El registro falló:', error);
       setSnackbarSeverity('error');

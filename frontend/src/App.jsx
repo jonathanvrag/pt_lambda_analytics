@@ -1,16 +1,19 @@
 import './App.css';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import Login from './components/login';
-import Dashboard from './components/dashboard';
+import UserList from './components/UserList';
+import Products from './components/Products';
+import { Box } from '@mui/material';
 
 function App() {
   return (
-    <BrowserRouter>
+    <Box>
       <Routes>
         <Route path='/' element={<Login />} />
-        <Route path='/dashboard' element={<Dashboard />} />
+        <Route path='/usersList' element={<UserList />} />
+        <Route path='/products' element={<Products />} />
       </Routes>
-    </BrowserRouter>
+    </Box>
   );
 }
 
