@@ -25,8 +25,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     ]
     
     ROL_CHOICES = [
-        ('admin', 'Admin'),
-        ('user', 'User'),
+        ('admin', 'Administrador'),
+        ('user', 'Usuario'),
     ]
 
     nombre = models.CharField(max_length=30)

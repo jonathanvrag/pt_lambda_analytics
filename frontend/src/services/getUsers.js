@@ -65,6 +65,12 @@ const updateUser = async (userId, updatedUserData) => {
       body: JSON.stringify({
         id: updatedUserData.id,
         email: updatedUserData.email,
+        nombre: updatedUserData.nombre, 
+        apellido: updatedUserData.apellido, 
+        telefono: updatedUserData.telefono, 
+        genero: updatedUserData.genero, 
+        rol: updatedUserData.rol, 
+        is_active: updatedUserData.is_active, 
       }),
     });
 

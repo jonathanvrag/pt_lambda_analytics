@@ -88,8 +88,16 @@ class UpdateUserAPIView(APIView):
 
         if request.user == body_user:
             return Response({'error': 'No puedes actualizar los datos de tu propio usuario.'}, status=status.HTTP_403_FORBIDDEN)
-
+        
+        # import pdb; pdb.set_trace()
+        body_user.nombre = request.data.get('nombre', body_user.nombre)
+        body_user.apellido = request.data.get('apellido', body_user.apellido)
         body_user.email = request.data.get('email', body_user.email)
+        body_user.telefono = request.data.get('telefono', body_user.telefono)
+        body_user.genero = request.data.get('genero', body_user.genero)
+        body_user.rol = request.data.get('rol', body_user.rol)
+        body_user.is_active = request.data.get('is_active', body_user.is_active)
+
         body_user.save()
 
         return Response({'message': 'Usuario actualizado correctamente.'}, status=status.HTTP_200_OK)
