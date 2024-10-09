@@ -54,4 +54,31 @@ const getUsers = async () => {
   }
 };
 
-export default getUsers;
+const updateUser = async (userId, updatedUserData) => {
+  try {
+    const response = await fetch(import.meta.env.VITE_API_USER_UPDATE, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
+      },
+      body: JSON.stringify({
+        id: updatedUserData.id,
+        email: updatedUserData.email,
+      }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error);
+    }
+
+    const updateUser = await response.json();
+    return updateUser;
+  } catch (error) {
+    console.log('Error al actualizar el usuario:', error);
+    throw error;
+  }
+};
+
+export default { getUsers, updateUser };

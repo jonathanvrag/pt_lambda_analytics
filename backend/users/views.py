@@ -78,18 +78,18 @@ class UpdateUserAPIView(APIView):
         try:
             body_user_id = request.data.get('id')
             if not body_user_id:
-                return Response({'error': 'User ID is required.'}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({'error': 'Se requiere el ID del usuario.'}, status=status.HTTP_400_BAD_REQUEST)
 
             body_user = User.objects.get(id=body_user_id)
         except User.DoesNotExist:
-            return Response({'error': 'User not found.'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'error': 'Usuario no encontrado.'}, status=status.HTTP_404_NOT_FOUND)
         except KeyError:
-            return Response({'error': 'Invalid request body.'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'Cuerpo de la solicitud inválido.'}, status=status.HTTP_400_BAD_REQUEST)
 
         if request.user == body_user:
-            return Response({'error': 'You cannot update your user\'s data.'}, status=status.HTTP_403_FORBIDDEN)
+            return Response({'error': 'No puedes actualizar los datos de tu propio usuario.'}, status=status.HTTP_403_FORBIDDEN)
 
         body_user.email = request.data.get('email', body_user.email)
         body_user.save()
 
-        return Response({'message': 'User updated successfully.'}, status=status.HTTP_200_OK)
+        return Response({'message': 'Usuario actualizado correctamente.'}, status=status.HTTP_200_OK)

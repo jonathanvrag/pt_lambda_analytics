@@ -11,6 +11,7 @@ import {
   TableHead,
   TableRow,
   Paper,
+  Box,
 } from '@mui/material';
 import FormEditUser from './FormEditUser';
 
@@ -22,7 +23,7 @@ export default function UserList() {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const usersData = await getUsers();
+        const usersData = await getUsers.getUsers();
         setUsers(usersData);
       } catch (error) {
         console.error('Error al obtener la lista de usuarios:', error);
@@ -95,7 +96,9 @@ export default function UserList() {
           justifyContent: 'center',
           alignItems: 'center',
         }}>
-        <FormEditUser user={userToEdit} onClose={handleCloseDrawer}/>
+        <Box>
+          <FormEditUser user={userToEdit} onClose={handleCloseDrawer} />
+        </Box>
       </Modal>
     </Layout>
   );

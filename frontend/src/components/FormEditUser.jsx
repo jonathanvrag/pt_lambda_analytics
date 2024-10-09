@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Box,
   Button,
@@ -13,12 +13,14 @@ import {
   FormControlLabel,
   FormLabel,
 } from '@mui/material';
+import getUsers from '../services/getUsers';
 
 const generos = ['Masculino', 'Femenino', 'Otro'];
 const roles = ['Administrador', 'Usuario'];
 
-export default function FormEditUser({ user, onClose, onSave }) {
+export default function FormEditUser({ user, onClose }) {
   const [formData, setFormData] = useState({
+    id: '',
     nombre: '',
     apellido: '',
     email: '',
@@ -29,9 +31,9 @@ export default function FormEditUser({ user, onClose, onSave }) {
   });
 
   useEffect(() => {
-    // Actualiza el estado del formulario con la información del usuario
     if (user) {
       setFormData({
+        id: user.id,
         nombre: user.nombre,
         apellido: user.apellido,
         email: user.email,
@@ -51,11 +53,16 @@ export default function FormEditUser({ user, onClose, onSave }) {
     });
   };
 
-  const handleSubmit = event => {
-    event.preventDefault();
-    // Aquí debes implementar la lógica para enviar los datos del formulario al backend
-    console.log('Enviando datos del formulario:', formData);
-    onSave(formData); // Llama a la función onSave que se pasa como prop
+  const handleSubmit = async e => {
+    e.preventDefault();
+
+    try {
+      const updatedUser = await getUsers.updateUser((user.id - 1), formData);
+      console.log('Usuario actualizado:', updatedUser, formData);
+      onClose();
+    } catch (error) {
+      console.error('Error al actualizar el usuario:', error);
+    }
   };
 
   return (
@@ -142,11 +149,7 @@ export default function FormEditUser({ user, onClose, onSave }) {
             name='is_active'
             value={formData.is_active}
             onChange={handleChange}>
-            <FormControlLabel
-              value={true}
-              control={<Radio />}
-              label='Activo'
-            />
+            <FormControlLabel value={true} control={<Radio />} label='Activo' />
             <FormControlLabel
               value={false}
               control={<Radio />}

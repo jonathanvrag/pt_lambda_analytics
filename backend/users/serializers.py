@@ -43,7 +43,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
 class UpdateUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'email']
+        fields = ['id', 'email', 'nombre', 'apellido', 'telefono', 'genero', 'rol', 'is_active']
 
     user_id = serializers.PrimaryKeyRelatedField(
         queryset=User.objects.all(), 
@@ -51,11 +51,16 @@ class UpdateUserSerializer(serializers.ModelSerializer):
         write_only=True,
         error_messages={'does_not_exist': 'Usuario no encontrado.'}
     )
-    username = serializers.CharField(required=False)
     email = serializers.EmailField(required=False)
 
+
     def update(self, instance, validated_data):
-        """Actualiza el usuario con los datos validados."""
         instance.email = validated_data.get('email', instance.email)
+        instance.nombre = validated_data.get('nombre', instance.nombre)
+        instance.apellido = validated_data.get('apellido', instance.apellido)
+        instance.telefono = validated_data.get('telefono', instance.telefono)
+        instance.genero = validated_data.get('genero', instance.genero)
+        instance.rol = validated_data.get('rol', instance.rol)
+        instance.is_active = validated_data.get('is_active', instance.is_active)
         instance.save()
         return instance
