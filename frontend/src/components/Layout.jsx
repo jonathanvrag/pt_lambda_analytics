@@ -1,10 +1,4 @@
-import {
-  Box,
-  Button,
-  Divider,
-  Drawer,
-  Toolbar,
-} from '@mui/material';
+import { Box, Button, Divider, Drawer, Toolbar } from '@mui/material';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
@@ -13,7 +7,7 @@ export default function Layout({ children }) {
     <Box
       sx={{
         display: 'grid',
-        gridTemplateColumns: '1fr 1fr',
+        gridTemplateColumns: '1fr 5fr',
       }}>
       <Drawer anchor='left' open={true} variant='persistent'>
         <Toolbar>
@@ -41,7 +35,7 @@ export default function Layout({ children }) {
           </Link>
         </Box>
       </Drawer>
-      {children}
+      <Box sx={{ padding: '4vh 10vw 4vh 0' }}>{children}</Box>
     </Box>
   );
 }

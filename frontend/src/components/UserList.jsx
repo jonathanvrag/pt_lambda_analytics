@@ -3,6 +3,7 @@ import getUsers from '../services/getUsers';
 import { useEffect, useState } from 'react';
 import {
   Button,
+  Modal,
   Table,
   TableBody,
   TableCell,
@@ -11,16 +12,18 @@ import {
   TableRow,
   Paper,
 } from '@mui/material';
+import FormEditUser from './FormEditUser';
 
 export default function UserList() {
   const [users, setUsers] = useState([]);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [userToEdit, setUserToEdit] = useState(null);
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
         const usersData = await getUsers();
         setUsers(usersData);
-        // console.log('Lista de usuarios: ', usersData)
       } catch (error) {
         console.error('Error al obtener la lista de usuarios:', error);
       }
@@ -28,9 +31,17 @@ export default function UserList() {
     fetchUsers();
   }, []);
 
+  const handleEditClick = user => {
+    setUserToEdit(user);
+    setDrawerOpen(true);
+  };
+
+  const handleCloseDrawer = () => {
+    setDrawerOpen(false);
+  };
+
   return (
     <Layout>
-      {' '}
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label='simple table'>
           <TableHead>
@@ -64,7 +75,10 @@ export default function UserList() {
                   {user.is_active ? 'Activo' : 'Inactivo'}
                 </TableCell>
                 <TableCell align='left'>
-                  <Button variant='contained' color='primary'>
+                  <Button
+                    variant='contained'
+                    color='primary'
+                    onClick={() => handleEditClick(user)}>
                     Editar
                   </Button>
                 </TableCell>
@@ -73,6 +87,16 @@ export default function UserList() {
           </TableBody>
         </Table>
       </TableContainer>
+      <Modal
+        open={drawerOpen}
+        onClose={handleCloseDrawer}
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+        <FormEditUser user={userToEdit} onClose={handleCloseDrawer}/>
+      </Modal>
     </Layout>
   );
 }
