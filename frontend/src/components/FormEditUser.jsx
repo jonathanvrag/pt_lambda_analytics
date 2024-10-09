@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import {
   Box,
   Button,
@@ -14,11 +14,13 @@ import {
   FormLabel,
 } from '@mui/material';
 import getUsers from '../services/getUsers';
+import { UserContext } from '../context/UserContext';
 
 const generos = ['Masculino', 'Femenino', 'Otro'];
 const roles = ['Administrador', 'Usuario'];
 
 export default function FormEditUser({ user, onClose }) {
+  const { refreshUsers } = useContext(UserContext);
   const [formData, setFormData] = useState({
     id: '',
     nombre: '',
@@ -57,9 +59,10 @@ export default function FormEditUser({ user, onClose }) {
     e.preventDefault();
 
     try {
-      const updatedUser = await getUsers.updateUser((user.id - 1), formData);
+      const updatedUser = await getUsers.updateUser(user.id - 1, formData);
       console.log('Usuario actualizado:', updatedUser, formData);
       onClose();
+      refreshUsers();
     } catch (error) {
       console.error('Error al actualizar el usuario:', error);
     }

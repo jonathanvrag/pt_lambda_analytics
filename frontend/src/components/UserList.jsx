@@ -1,6 +1,5 @@
 import Layout from './Layout';
-import getUsers from '../services/getUsers';
-import { useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import {
   Button,
   Modal,
@@ -14,23 +13,12 @@ import {
   Box,
 } from '@mui/material';
 import FormEditUser from './FormEditUser';
+import { UserContext } from '../context/UserContext';
 
 export default function UserList() {
-  const [users, setUsers] = useState([]);
+  const { users } = useContext(UserContext);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [userToEdit, setUserToEdit] = useState(null);
-
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const usersData = await getUsers.getUsers();
-        setUsers(usersData);
-      } catch (error) {
-        console.error('Error al obtener la lista de usuarios:', error);
-      }
-    };
-    fetchUsers();
-  }, []);
 
   const handleEditClick = user => {
     setUserToEdit(user);

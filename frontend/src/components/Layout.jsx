@@ -1,6 +1,5 @@
 import { Box, Button, Divider, Drawer, Toolbar } from '@mui/material';
 import { Link } from 'react-router-dom';
-import PropTypes from 'prop-types';
 
 export default function Layout({ children }) {
   return (
@@ -39,7 +38,3 @@ export default function Layout({ children }) {
     </Box>
   );
 }
-
-Layout.propTypes = {
-  children: PropTypes.node.isRequired,
-};
