@@ -63,6 +63,11 @@ const refreshToken = async () => {
   }
 };
 
+const logout = () => {
+  localStorage.removeItem('accessToken');
+  localStorage.removeItem('refreshToken');
+}
+
 const register = async userData => {
   try {
     const response = await fetch(API_REGISTER, {
@@ -87,4 +92,8 @@ const register = async userData => {
   }
 };
 
-export default { login, refreshToken, register };
+const getAccessToken = () => {
+  return localStorage.getItem('accessToken');
+};
+
+export default { login, refreshToken, logout, register, getAccessToken };

@@ -25,8 +25,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     ]
     
     ROL_CHOICES = [
-        ('admin', 'Administrador'),
-        ('user', 'Usuario'),
+        ('administrador', 'Administrador'),
+        ('usuario', 'Usuario'),
     ]
 
     nombre = models.CharField(max_length=30)
@@ -34,7 +34,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
     telefono = models.CharField(max_length=15, blank=True, null=True)
     genero = models.CharField(max_length=10, choices=GENERO_CHOICES, blank=True, null=True)
-    rol = models.CharField(max_length=10, choices=ROL_CHOICES, null=True, blank=True)
+    rol = models.CharField(max_length=20, choices=ROL_CHOICES, null=True, blank=True)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
 

@@ -1,7 +1,19 @@
 import { Box, Button, Divider, Drawer, Toolbar } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import auth from '../services/auth';
 
 export default function Layout({ children }) {
+  const navigate = useNavigate();
+
+  const handleLogut = async () => {
+    try {
+      auth.logout();
+      navigate('/');
+    } catch (error) {
+      console.error('Error durante el cierre de sesión:', error);
+    }
+  };
+
   return (
     <Box
       sx={{
@@ -26,10 +38,20 @@ export default function Layout({ children }) {
             justifyContent: 'center',
             alignItems: 'center',
             padding: '16px 0',
+            gap: '16px',
           }}>
           <Link to='/usersList'>
-            <Button variant='contained' color='primary'>
+            <Button variant='contained' color='primary' sx={{ width: '150px' }}>
               Usuarios
+            </Button>
+          </Link>
+          <Link to='/'>
+            <Button
+              variant='contained'
+              color='primary'
+              sx={{ width: '150px' }}
+              onClick={handleLogut}>
+              Cerrar sesión
             </Button>
           </Link>
         </Box>

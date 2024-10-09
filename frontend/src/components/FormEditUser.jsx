@@ -48,10 +48,10 @@ export default function FormEditUser({ user, onClose }) {
   }, [user]);
 
   const handleChange = event => {
-    const { name, value, checked } = event.target;
+    const { name, value } = event.target;
     setFormData({
       ...formData,
-      [name]: name === 'is_active' ? checked : value,
+      [name]: name === 'is_active' ? value === 'true' : value,
     });
   };
 
@@ -124,7 +124,7 @@ export default function FormEditUser({ user, onClose }) {
             value={formData.genero}
             onChange={handleChange}>
             {generos.map(genero => (
-              <MenuItem key={genero} value={genero}>
+              <MenuItem key={genero} value={genero.toLowerCase()}>
                 {genero}
               </MenuItem>
             ))}
@@ -138,7 +138,7 @@ export default function FormEditUser({ user, onClose }) {
             value={formData.rol}
             onChange={handleChange}>
             {roles.map(rol => (
-              <MenuItem key={rol} value={rol}>
+              <MenuItem key={rol} value={rol.toLowerCase()}>
                 {rol}
               </MenuItem>
             ))}
@@ -150,7 +150,7 @@ export default function FormEditUser({ user, onClose }) {
             row
             aria-labelledby='estado-label'
             name='is_active'
-            value={formData.is_active}
+            value={formData.is_active ? true : false}
             onChange={handleChange}>
             <FormControlLabel value={true} control={<Radio />} label='Activo' />
             <FormControlLabel

@@ -33,7 +33,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
             email=validated_data['email'],
             telefono=validated_data['telefono'],
             genero=validated_data['genero'],
-            rol=validated_data.get('rol', 'user'),
+            rol=validated_data.get('rol', 'usuario'),
             is_active=validated_data.get('is_active', True),
         )
         user.set_password(validated_data['password'])
@@ -43,7 +43,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
 class UpdateUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'email', 'nombre', 'apellido', 'telefono', 'genero', 'rol', 'is_active']
+        fields = ['id', 'email', 'nombre', 'apellido', 'telefono', 'genero', 'rol', 'is_active', 'user_id']
 
     user_id = serializers.PrimaryKeyRelatedField(
         queryset=User.objects.all(), 
@@ -51,8 +51,6 @@ class UpdateUserSerializer(serializers.ModelSerializer):
         write_only=True,
         error_messages={'does_not_exist': 'Usuario no encontrado.'}
     )
-    email = serializers.EmailField(required=False)
-
 
     def update(self, instance, validated_data):
         instance.email = validated_data.get('email', instance.email)

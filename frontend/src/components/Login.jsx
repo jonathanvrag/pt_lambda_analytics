@@ -83,7 +83,7 @@ export default function Login() {
       setSnackbarSeverity('success');
       setSnackbarMessage('Usuario registrado exitosamente.');
       setSnackbarOpen(true);
-      navigate('/login');
+      // navigate('/');
     } catch (error) {
       console.error('El registro falló:', error);
       setSnackbarSeverity('error');
@@ -125,19 +125,18 @@ export default function Login() {
           sx={{
             display: 'flex',
             justifyContent: 'center',
-            alignItems: 'end',
+            alignItems: 'center',
           }}>
           <Box
             sx={{
-              height: '90vh',
+              height: 'auto',
               width: '30vw',
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'center',
               alignItems: 'center',
               backgroundColor: 'white',
-              borderTopLeftRadius: '32px',
-              borderTopRightRadius: '32px',
+              borderRadius: '36px',
               padding: '2rem',
             }}>
             <Tabs value={activeTab} onChange={handleChangeTab} centered>
