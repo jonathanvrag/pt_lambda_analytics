@@ -1,4 +1,5 @@
 const API_AUTH = import.meta.env.VITE_API_AUTH;
+const API_REFRESH = import.meta.env.VITE_API_AUTH_REFRESH;
 const API_REGISTER = import.meta.env.VITE_API_REGISTER;
 
 const login = async (email, password) => {
@@ -32,18 +33,18 @@ const login = async (email, password) => {
 
 const refreshToken = async () => {
   try {
-    const refreshToken = localStorage.getItem('refreshToken');
+    const refreshTokenlocal = localStorage.getItem('refreshToken');
 
     if (!refreshToken) {
       throw new Error('No se encontró el token de refresco');
     }
 
-    const response = await fetch(`${import.meta.env.VITE_API_AUTH}/refresh/`, {
+    const response = await fetch(API_REFRESH, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ refresh: refreshToken }),
+      body: JSON.stringify({ refresh: refreshTokenlocal }),
     });
 
     if (!response.ok) {

@@ -1,4 +1,5 @@
-import refreshToken from './auth';
+import auth from './auth';
+const { refreshToken } = auth;
 
 const getUsers = async () => {
   try {
