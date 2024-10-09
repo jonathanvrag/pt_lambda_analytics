@@ -23,8 +23,8 @@ def get_products(articulo):
       nombre = value.text.strip()
       url_product = value['href']
 
-      precios = element.find('span', class_='andes-money-amount__fraction')
-      precio = precios.text.strip()
+      precios = element.find_all('span', class_='andes-money-amount__fraction')
+      precio = precios[0].text.strip() if len(precios) <= 2 else precios[1].text.strip()
 
       desc = element.find('span', class_='andes-money-amount__discount')
       
