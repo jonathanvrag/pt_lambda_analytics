@@ -30,6 +30,38 @@ const login = async (email, password) => {
   }
 };
 
+const refreshToken = async () => {
+  try {
+    const refreshToken = localStorage.getItem('refreshToken');
+
+    if (!refreshToken) {
+      throw new Error('No se encontró el token de refresco');
+    }
+
+    const response = await fetch(`${import.meta.env.VITE_API_AUTH}/refresh/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ refresh: refreshToken }),
+    });
+
+    if (!response.ok) {
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
+      throw new Error('Error al refrescar el token');
+    }
+
+    const data = await response.json();
+    localStorage.setItem('accessToken', data.access);
+
+    return data.access;
+  } catch (error) {
+    console.error('Error al refrescar el token:', error);
+    throw error;
+  }
+};
+
 const register = async userData => {
   try {
     const response = await fetch(API_REGISTER, {
@@ -42,7 +74,7 @@ const register = async userData => {
 
     if (!response.ok) {
       const errorData = await response.json();
-      console.log(errorData)
+      console.log(errorData);
       throw new Error(errorData);
     }
 
@@ -54,4 +86,4 @@ const register = async userData => {
   }
 };
 
-export default { login, register };
+export default { login, refreshToken, register };
