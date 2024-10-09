@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   Divider,
   Drawer,
   List,
@@ -19,22 +20,29 @@ export default function Layout({ children }) {
       }}>
       <Drawer anchor='left' open={true} variant='persistent'>
         <Toolbar>
-          <List>
+          <Box>
             <Link to='/products'>
-              <ListItem button>
-                <ListItemText primary='Productos' />
-              </ListItem>
+              <Button variant='contained' color='primary'>
+                Productos
+              </Button>
             </Link>
-          </List>
+          </Box>
         </Toolbar>
         <Divider />
-        <List>
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            padding: '16px 0',
+          }}>
           <Link to='/usersList'>
-            <ListItem button>
-              <ListItemText primary='Usuarios' />
-            </ListItem>
+            <Button variant='contained' color='primary'>
+              Usuarios
+            </Button>
           </Link>
-        </List>
+        </Box>
       </Drawer>
       {children}
     </Box>
