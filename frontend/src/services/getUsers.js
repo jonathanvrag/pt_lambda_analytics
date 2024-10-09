@@ -56,27 +56,68 @@ const getUsers = async () => {
 
 const updateUser = async (userId, updatedUserData) => {
   try {
+    const accessToken = localStorage.getItem('accessToken');
+
+    if (!accessToken) {
+      throw new Error('No se encontró el token de acceso');
+    }
+
     const response = await fetch(import.meta.env.VITE_API_USER_UPDATE, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
+        'Authorization': `Bearer ${accessToken}`,
       },
       body: JSON.stringify({
         id: updatedUserData.id,
         email: updatedUserData.email,
-        nombre: updatedUserData.nombre, 
-        apellido: updatedUserData.apellido, 
-        telefono: updatedUserData.telefono, 
-        genero: updatedUserData.genero, 
-        rol: updatedUserData.rol, 
-        is_active: updatedUserData.is_active, 
+        nombre: updatedUserData.nombre,
+        apellido: updatedUserData.apellido,
+        telefono: updatedUserData.telefono,
+        genero: updatedUserData.genero,
+        rol: updatedUserData.rol,
+        is_active: updatedUserData.is_active,
       }),
     });
 
     if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.error);
+      if (response.status === 401) {
+        console.error('Token inválido o expirado');
+        try {
+          const newAccessToken = await refreshToken();
+
+          const retryResponse = await fetch(import.meta.env.VITE_API_USER_UPDATE, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${newAccessToken}`,
+            },
+            body: JSON.stringify({
+              id: updatedUserData.id,
+              email: updatedUserData.email,
+              nombre: updatedUserData.nombre,
+              apellido: updatedUserData.apellido,
+              telefono: updatedUserData.telefono,
+              genero: updatedUserData.genero,
+              rol: updatedUserData.rol,
+              is_active: updatedUserData.is_active,
+            }),
+          });
+
+          if (!retryResponse.ok) {
+            throw new Error('Error al actualizar el usuario después del refresco');
+          }
+
+          const data = await retryResponse.json();
+          return data;
+        } catch (refreshError) {
+          console.error('Error al refrescar el token:', refreshError);
+          throw refreshError;
+        }
+      } else {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Error al actualizar el usuario');
+      }
     }
 
     const updateUser = await response.json();
