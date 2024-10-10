@@ -21,3 +21,6 @@ ENV/
 .env*
 logs
 *.log
+
+# Static
+static/
