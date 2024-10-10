@@ -105,6 +105,4 @@ python manage.py collectstatic
 
 ## Información Adicional
 
-- La aplicación está desplegada en [-https://jonathanvra.pythonanywhere.com/](https://jonathanvra.pythonanywhere.com/)
-
 - Este proyecto ha sido desarrollado por Jonathan Vera Gómez como parte de una prueba técnica para la empresa Lambda Analytics.

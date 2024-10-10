@@ -64,6 +64,4 @@ Después de construir la aplicación, puedes iniciar el servidor en modo producc
 
 ## Información Adicional
 
-<!-- - La aplicación está desplegada en [-jonathanvera.netlify.app.](https://-jonathanvera.netlify.app) -->
-
 - Este proyecto ha sido desarrollado por Jonathan Vera Gómez como parte de una prueba técnica para la empresa Lambda Analytics.
