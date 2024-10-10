@@ -87,7 +87,6 @@ WSGI_APPLICATION = 'back_admin.wsgi.application'
 
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:5173',
-    'https://lambdaanalytics-jonathanvera.netlify.app/',
 ]
 
 # Database
