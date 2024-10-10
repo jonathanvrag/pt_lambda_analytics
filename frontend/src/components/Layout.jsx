@@ -17,6 +17,7 @@ export default function Layout({ children }) {
   return (
     <Box
       sx={{
+        height: '100vh',
         display: 'grid',
         gridTemplateColumns: '1fr 5fr',
       }}>
@@ -56,7 +57,15 @@ export default function Layout({ children }) {
           </Link>
         </Box>
       </Drawer>
-      <Box sx={{ padding: '4vh 10vw 4vh 0' }}>{children}</Box>
+      <Box
+        sx={{
+          padding: '4vh 5vw 4vh 0',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+        }}>
+        {children}
+      </Box>
     </Box>
   );
 }
