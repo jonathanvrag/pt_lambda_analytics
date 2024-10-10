@@ -6,9 +6,12 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import GroupIcon from '@mui/icons-material/Group';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { jwtDecode } from 'jwt-decode';
+import { useContext } from 'react';
+import { UserContext } from '../context/UserContext';
 
 export default function Layout({ children }) {
   const navigate = useNavigate();
+  const { refreshUsers } = useContext(UserContext);
 
   const handleLogut = async () => {
     try {
@@ -31,6 +34,10 @@ export default function Layout({ children }) {
       }
     }
     return false;
+  };
+
+  const handleUsuariosClick = () => {
+    refreshUsers();
   };
 
   return (
@@ -73,7 +80,7 @@ export default function Layout({ children }) {
             gap: '16px',
           }}>
           {isAdmin() && (
-            <Link to='/usersList'>
+            <Link to='/usersList' onClick={handleUsuariosClick}>
               <Button
                 variant='contained'
                 color='primary'
