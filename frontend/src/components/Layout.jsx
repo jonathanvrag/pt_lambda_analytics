@@ -1,6 +1,10 @@
-import { Box, Button, Divider, Drawer, Toolbar } from '@mui/material';
+import { Box, Button, Divider, Drawer } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import auth from '../services/auth';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import GroupIcon from '@mui/icons-material/Group';
+import LogoutIcon from '@mui/icons-material/Logout';
 
 export default function Layout({ children }) {
   const navigate = useNavigate();
@@ -22,15 +26,27 @@ export default function Layout({ children }) {
         gridTemplateColumns: '1fr 5fr',
       }}>
       <Drawer anchor='left' open={true} variant='persistent'>
-        <Toolbar>
-          <Box>
-            <Link to='/products'>
-              <Button variant='contained' color='primary'>
-                Productos
-              </Button>
-            </Link>
-          </Box>
-        </Toolbar>
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            padding: '16px 0',
+            gap: '16px',
+            margin: 2,
+          }}>
+          <Link to='/products'>
+            <Button variant='contained' color='primary' sx={{ width: '150px' }}>
+              Productos <ShoppingCartIcon />
+            </Button>
+          </Link>
+          <Link to='/wishList'>
+            <Button variant='contained' color='primary' sx={{ width: '150px' }}>
+              Lista de deseos <FavoriteIcon />
+            </Button>
+          </Link>
+        </Box>
         <Divider />
         <Box
           sx={{
@@ -43,7 +59,7 @@ export default function Layout({ children }) {
           }}>
           <Link to='/usersList'>
             <Button variant='contained' color='primary' sx={{ width: '150px' }}>
-              Usuarios
+              Usuarios <GroupIcon />
             </Button>
           </Link>
           <Link to='/'>
@@ -52,7 +68,7 @@ export default function Layout({ children }) {
               color='primary'
               sx={{ width: '150px' }}
               onClick={handleLogut}>
-              Cerrar sesión
+              Cerrar sesión <LogoutIcon />
             </Button>
           </Link>
         </Box>
