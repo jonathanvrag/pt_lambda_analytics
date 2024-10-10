@@ -18,7 +18,7 @@ import {
 import SearchIcon from '@mui/icons-material/Search';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import Layout from './Layout';
-import productService from '../services/products';
+import { getProducts, getProductMetrics } from '../services/products';
 import ProductMetricCard from './ProductMetricCard';
 
 export default function Products() {
@@ -33,11 +33,11 @@ export default function Products() {
     setError(null);
 
     try {
-      const fetchedProducts = await productService.getProducts(searchTerm);
+      const fetchedProducts = await getProducts(searchTerm);
       setProducts(fetchedProducts);
 
       if (fetchedProducts.length > 0) {
-        const fetchedMetrics = await productService.getProductMetrics(
+        const fetchedMetrics = await getProductMetrics(
           fetchedProducts
         );
         setMetrics(fetchedMetrics);

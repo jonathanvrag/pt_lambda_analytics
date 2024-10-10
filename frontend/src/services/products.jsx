@@ -1,4 +1,4 @@
-const getProducts = async term => {
+export const getProducts = async term => {
   const url = `${import.meta.env.VITE_API_PRODUCTS_SEARCH}?query=${term}`;
 
   try {
@@ -12,7 +12,7 @@ const getProducts = async term => {
   }
 };
 
-const getProductMetrics = async products => {
+export const getProductMetrics = async products => {
   const url = `${import.meta.env.VITE_API_PRODUCTS_METRICS}`;
 
   try {
@@ -35,5 +35,3 @@ const getProductMetrics = async products => {
     throw error;
   }
 };
-
-export default { getProducts, getProductMetrics };

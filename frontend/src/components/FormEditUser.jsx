@@ -13,7 +13,7 @@ import {
   FormControlLabel,
   FormLabel,
 } from '@mui/material';
-import getUsers from '../services/getUsers';
+import { updateUser } from '../services/getUsers';
 import { UserContext } from '../context/UserContext';
 
 const generos = ['Masculino', 'Femenino', 'Otro'];
@@ -59,7 +59,7 @@ export default function FormEditUser({ user, onClose }) {
     e.preventDefault();
 
     try {
-      const updatedUser = await getUsers.updateUser(user.id - 1, formData);
+      const updatedUser = await updateUser(user.id - 1, formData);
       console.log('Usuario actualizado:', updatedUser, formData);
       onClose();
       refreshUsers();

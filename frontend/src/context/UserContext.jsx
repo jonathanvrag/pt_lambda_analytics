@@ -1,5 +1,5 @@
 import { createContext, useState, useEffect } from 'react';
-import getUsers from '../services/getUsers';
+import { getUsers } from '../services/getUsers';
 
 const UserContext = createContext();
 
@@ -9,7 +9,7 @@ const UserProvider = ({ children }) => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const usersData = await getUsers.getUsers();
+        const usersData = await getUsers();
         setUsers(usersData);
       } catch (error) {
         console.error('Error al obtener la lista de usuarios:', error);
@@ -20,7 +20,7 @@ const UserProvider = ({ children }) => {
 
   const refreshUsers = async () => {
     try {
-      const usersData = await getUsers.getUsers();
+      const usersData = await getUsers();
       setUsers(usersData);
     } catch (error) {
       console.error('Error al refrescar la lista de usuarios:', error);

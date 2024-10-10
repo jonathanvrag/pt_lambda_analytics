@@ -1,6 +1,6 @@
 import { Box, Button, Divider, Drawer } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
-import auth from '../services/auth';
+import { logout } from '../services/auth';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import GroupIcon from '@mui/icons-material/Group';
@@ -11,7 +11,7 @@ export default function Layout({ children }) {
 
   const handleLogut = async () => {
     try {
-      auth.logout();
+      logout();
       navigate('/');
     } catch (error) {
       console.error('Error durante el cierre de sesión:', error);

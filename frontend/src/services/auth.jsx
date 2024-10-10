@@ -2,7 +2,7 @@ const API_AUTH = import.meta.env.VITE_API_AUTH;
 const API_REFRESH = import.meta.env.VITE_API_AUTH_REFRESH;
 const API_REGISTER = import.meta.env.VITE_API_REGISTER;
 
-const login = async (email, password) => {
+export const login = async (email, password) => {
   try {
     const response = await fetch(API_AUTH, {
       method: 'POST',
@@ -31,7 +31,7 @@ const login = async (email, password) => {
   }
 };
 
-const refreshToken = async () => {
+export const refreshToken = async () => {
   try {
     const refreshTokenlocal = localStorage.getItem('refreshToken');
 
@@ -63,12 +63,12 @@ const refreshToken = async () => {
   }
 };
 
-const logout = () => {
+export const logout = () => {
   localStorage.removeItem('accessToken');
   localStorage.removeItem('refreshToken');
 }
 
-const register = async userData => {
+export const register = async userData => {
   try {
     const response = await fetch(API_REGISTER, {
       method: 'POST',
@@ -92,8 +92,6 @@ const register = async userData => {
   }
 };
 
-const getAccessToken = () => {
+export const getAccessToken = () => {
   return localStorage.getItem('accessToken');
 };
-
-export default { login, refreshToken, logout, register, getAccessToken };

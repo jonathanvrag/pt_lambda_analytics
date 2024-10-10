@@ -11,7 +11,7 @@ import {
 } from '@mui/material';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import wishlist from '../services/wishList';
+import { addToWishlist } from '../services/wishList';
 
 export default function ProductMetricCard({ metric }) {
   const [isAddingToWishlist, setIsAddingToWishlist] = useState(false);
@@ -27,13 +27,12 @@ export default function ProductMetricCard({ metric }) {
 
   useEffect(() => {
     if (isAddedToWishlist) {
-      wishlist
-        .addToWishlist({
-          nombre: metric.nombre,
-          image_url: metric.image_url,
-          precio: metric.precio,
-          url: metric.url,
-        })
+      addToWishlist({
+        nombre: metric.nombre,
+        image_url: metric.image_url,
+        precio: metric.precio,
+        url: metric.url,
+      })
         .then(response => {
           console.log('Artículo añadido a la lista de deseos:', response);
           setSnackbarMessage('Artículo añadido a la lista de deseos');

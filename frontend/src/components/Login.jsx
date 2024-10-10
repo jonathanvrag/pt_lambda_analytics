@@ -14,7 +14,7 @@ import {
   Typography,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import auth from '../services/auth';
+import { login, register } from '../services/auth';
 
 const isValidEmail = email => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -40,7 +40,7 @@ export default function Login() {
     e.preventDefault();
 
     try {
-      const loginSuccess = await auth.login(email, password);
+      const loginSuccess = await login(email, password);
 
       if (loginSuccess) {
         navigate('/usersList');
@@ -77,7 +77,7 @@ export default function Login() {
     }
 
     try {
-      const registerSuccess = await auth.register(newUserData);
+      const registerSuccess = await register(newUserData);
 
       console.log('Usuario registrado exitosamente:', registerSuccess.data);
       setSnackbarSeverity('success');

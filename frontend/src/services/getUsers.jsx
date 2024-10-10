@@ -1,7 +1,6 @@
-import auth from './auth';
-const { refreshToken } = auth;
+import { refreshToken } from './auth';
 
-const getUsers = async () => {
+export const getUsers = async () => {
   try {
     const accessToken = localStorage.getItem('accessToken');
 
@@ -54,7 +53,7 @@ const getUsers = async () => {
   }
 };
 
-const updateUser = async (userId, updatedUserData) => {
+export const updateUser = async (userId, updatedUserData) => {
   try {
     const accessToken = localStorage.getItem('accessToken');
 
@@ -66,7 +65,7 @@ const updateUser = async (userId, updatedUserData) => {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${accessToken}`,
+        Authorization: `Bearer ${accessToken}`,
       },
       body: JSON.stringify({
         id: updatedUserData.id,
@@ -86,26 +85,31 @@ const updateUser = async (userId, updatedUserData) => {
         try {
           const newAccessToken = await refreshToken();
 
-          const retryResponse = await fetch(import.meta.env.VITE_API_USER_UPDATE, {
-            method: 'PUT',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${newAccessToken}`,
-            },
-            body: JSON.stringify({
-              id: updatedUserData.id,
-              email: updatedUserData.email,
-              nombre: updatedUserData.nombre,
-              apellido: updatedUserData.apellido,
-              telefono: updatedUserData.telefono,
-              genero: updatedUserData.genero,
-              rol: updatedUserData.rol,
-              is_active: updatedUserData.is_active,
-            }),
-          });
+          const retryResponse = await fetch(
+            import.meta.env.VITE_API_USER_UPDATE,
+            {
+              method: 'PUT',
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${newAccessToken}`,
+              },
+              body: JSON.stringify({
+                id: updatedUserData.id,
+                email: updatedUserData.email,
+                nombre: updatedUserData.nombre,
+                apellido: updatedUserData.apellido,
+                telefono: updatedUserData.telefono,
+                genero: updatedUserData.genero,
+                rol: updatedUserData.rol,
+                is_active: updatedUserData.is_active,
+              }),
+            }
+          );
 
           if (!retryResponse.ok) {
-            throw new Error('Error al actualizar el usuario después del refresco');
+            throw new Error(
+              'Error al actualizar el usuario después del refresco'
+            );
           }
 
           const data = await retryResponse.json();
@@ -127,5 +131,3 @@ const updateUser = async (userId, updatedUserData) => {
     throw error;
   }
 };
-
-export default { getUsers, updateUser };

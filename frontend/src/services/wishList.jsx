@@ -1,6 +1,6 @@
-import * as jwtDecode from 'jwt-decode';
+import {jwtDecode} from 'jwt-decode';
 
-const addToWishlist = async productData => {
+export const addToWishlist = async productData => {
   const token = localStorage.getItem('accessToken');
 
   if (!token) {
@@ -45,5 +45,3 @@ const addToWishlist = async productData => {
     throw error;
   }
 };
-
-export default { addToWishlist };
