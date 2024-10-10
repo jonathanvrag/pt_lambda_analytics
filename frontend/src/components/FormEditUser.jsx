@@ -12,6 +12,8 @@ import {
   RadioGroup,
   FormControlLabel,
   FormLabel,
+  Snackbar,
+  Alert,
 } from '@mui/material';
 import { updateUser } from '../services/getUsers';
 import { UserContext } from '../context/UserContext';
@@ -31,6 +33,7 @@ export default function FormEditUser({ user, onClose }) {
     rol: '',
     is_active: true,
   });
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     if (user) {
@@ -49,6 +52,16 @@ export default function FormEditUser({ user, onClose }) {
 
   const handleChange = event => {
     const { name, value } = event.target;
+
+    if (name === 'telefono') {
+      const inputValue = value.replace(/[^0-9]/g, '');
+      setFormData({
+        ...formData,
+        [name]: inputValue,
+      });
+      return;
+    }
+
     setFormData({
       ...formData,
       [name]: name === 'is_active' ? value === 'true' : value,
@@ -57,6 +70,24 @@ export default function FormEditUser({ user, onClose }) {
 
   const handleSubmit = async e => {
     e.preventDefault();
+    setError(null);
+
+    if (
+      !formData.nombre ||
+      !formData.apellido ||
+      !formData.email ||
+      !formData.telefono ||
+      !formData.genero ||
+      !formData.rol
+    ) {
+      setError('Por favor, completa todos los campos.');
+      return;
+    }
+
+    if (formData.telefono.length < 7) {
+      setError('El teléfono debe tener al menos 7 números.');
+      return;
+    }
 
     try {
       const updatedUser = await updateUser(user.id - 1, formData);
@@ -65,6 +96,7 @@ export default function FormEditUser({ user, onClose }) {
       refreshUsers();
     } catch (error) {
       console.error('Error al actualizar el usuario:', error);
+      setError('Hubo un error al actualizar el usuario.');
     }
   };
 
@@ -83,8 +115,16 @@ export default function FormEditUser({ user, onClose }) {
       <Typography variant='h6' component='h2' gutterBottom>
         Editar Usuario
       </Typography>
+      {error && (
+        <Snackbar open={!!error} autoHideDuration={6000} onClose={() => setError(null)}>
+          <Alert onClose={() => setError(null)} severity="error">
+            {error}
+          </Alert>
+        </Snackbar>
+      )}
       <form onSubmit={handleSubmit}>
         <TextField
+          required
           label='Nombre'
           name='nombre'
           value={formData.nombre}
@@ -93,6 +133,7 @@ export default function FormEditUser({ user, onClose }) {
           margin='normal'
         />
         <TextField
+          required
           label='Apellido'
           name='apellido'
           value={formData.apellido}
@@ -101,6 +142,7 @@ export default function FormEditUser({ user, onClose }) {
           margin='normal'
         />
         <TextField
+          required
           label='Email'
           name='email'
           value={formData.email}
@@ -109,16 +151,24 @@ export default function FormEditUser({ user, onClose }) {
           margin='normal'
         />
         <TextField
+          required
           label='Teléfono'
           name='telefono'
           value={formData.telefono}
           onChange={handleChange}
           fullWidth
           margin='normal'
+          inputProps={{
+            inputMode: 'numeric',
+            pattern: '[0-9]*',
+          }}
+          error={formData.telefono.length > 0 && formData.telefono.length < 7}
+          helperText={formData.telefono.length > 0 && formData.telefono.length < 7 ? 'El teléfono debe tener al menos 7 números.' : ''}
         />
         <FormControl fullWidth margin='normal'>
           <InputLabel id='genero-label'>Género</InputLabel>
           <Select
+            required
             labelId='genero-label'
             name='genero'
             value={formData.genero}
@@ -133,6 +183,7 @@ export default function FormEditUser({ user, onClose }) {
         <FormControl fullWidth margin='normal'>
           <InputLabel id='rol-label'>Rol</InputLabel>
           <Select
+            required
             labelId='rol-label'
             name='rol'
             value={formData.rol}

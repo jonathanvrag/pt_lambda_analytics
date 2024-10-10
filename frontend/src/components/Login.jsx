@@ -39,6 +39,13 @@ export default function Login() {
   const handleSubmit = async e => {
     e.preventDefault();
 
+    if (email.trim() === '' || password.trim() === '') {
+      setSnackbarSeverity('error');
+      setSnackbarMessage('Por favor, completa todos los campos.');
+      setSnackbarOpen(true);
+      return;
+    }
+
     try {
       const loginSuccess = await login(email, password);
 
@@ -60,6 +67,34 @@ export default function Login() {
   const handleRegisterSubmit = async e => {
     e.preventDefault();
 
+    if (
+      regName.trim() === '' ||
+      regLastName.trim() === '' ||
+      regEmail.trim() === '' ||
+      regPhone.trim() === '' ||
+      regPassword.trim() === '' ||
+      regGender.trim() === ''
+    ) {
+      setSnackbarSeverity('error');
+      setSnackbarMessage('Por favor, completa todos los campos.');
+      setSnackbarOpen(true);
+      return;
+    }
+
+    if (!isValidEmail(regEmail)) {
+      setSnackbarSeverity('error');
+      setSnackbarMessage('Por favor, ingresa un correo electrónico válido.');
+      setSnackbarOpen(true);
+      return;
+    }
+
+    if (regPhone.length < 7) {
+      setSnackbarSeverity('error');
+      setSnackbarMessage('El teléfono debe tener al menos 7 números.');
+      setSnackbarOpen(true);
+      return;
+    }
+
     const newUserData = {
       nombre: regName,
       apellido: regLastName,
@@ -68,13 +103,6 @@ export default function Login() {
       genero: regGender,
       password: regPassword,
     };
-
-    if (!isValidEmail(regEmail)) {
-      setSnackbarSeverity('error');
-      setSnackbarMessage('Por favor, ingresa un correo electrónico válido.');
-      setSnackbarOpen(true);
-      return;
-    }
 
     try {
       const registerSuccess = await register(newUserData);
@@ -87,7 +115,7 @@ export default function Login() {
     } catch (error) {
       console.error('El registro falló:', error);
       setSnackbarSeverity('error');
-      setSnackbarMessage(error);
+      setSnackbarMessage(error.message || 'Error en el registro');
       setSnackbarOpen(true);
     }
   };
@@ -146,6 +174,7 @@ export default function Login() {
             {activeTab === 0 && (
               <form onSubmit={handleSubmit} style={{ width: '100%' }}>
                 <TextField
+                  required
                   label='Correo electrónico'
                   fullWidth
                   margin='normal'
@@ -155,6 +184,7 @@ export default function Login() {
                   onChange={e => setEmail(e.target.value)}
                 />
                 <TextField
+                  required
                   label='Contraseña'
                   fullWidth
                   margin='normal'
@@ -177,6 +207,7 @@ export default function Login() {
             {activeTab === 1 && (
               <form onSubmit={handleRegisterSubmit} style={{ width: '100%' }}>
                 <TextField
+                  required
                   label='Nombre'
                   fullWidth
                   margin='normal'
@@ -185,6 +216,7 @@ export default function Login() {
                   onChange={e => setRegName(e.target.value)}
                 />
                 <TextField
+                  required
                   label='Apellido'
                   fullWidth
                   margin='normal'
@@ -193,6 +225,7 @@ export default function Login() {
                   onChange={e => setRegLastName(e.target.value)}
                 />
                 <TextField
+                  required
                   label='Correo electrónico'
                   fullWidth
                   margin='normal'
@@ -202,14 +235,29 @@ export default function Login() {
                   onChange={e => setRegEmail(e.target.value)}
                 />
                 <TextField
+                  required
                   label='Teléfono'
                   fullWidth
                   margin='normal'
                   variant='outlined'
                   value={regPhone}
-                  onChange={e => setRegPhone(e.target.value)}
+                  onChange={e => {
+                    const inputValue = e.target.value.replace(/[^0-9]/g, '');
+                    setRegPhone(inputValue);
+                  }}
+                  inputProps={{
+                    inputMode: 'numeric',
+                    pattern: '[0-9]*',
+                  }}
+                  error={regPhone.length > 0 && regPhone.length < 7}
+                  helperText={
+                    regPhone.length > 0 && regPhone.length < 7
+                      ? 'El teléfono debe tener al menos 7 números.'
+                      : ''
+                  }
                 />
                 <TextField
+                  required
                   label='Contraseña'
                   fullWidth
                   margin='normal'
@@ -221,6 +269,7 @@ export default function Login() {
                 <FormControl fullWidth margin='normal'>
                   <InputLabel id='genero-label'>Género</InputLabel>
                   <Select
+                    required
                     labelId='genero-label'
                     id='genero-select'
                     label='Género'
