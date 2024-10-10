@@ -2,12 +2,16 @@ from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import get_user_model
-from .serializers import UserSerializer, UserCreateSerializer, UpdateUserSerializer
+from .serializers import UserSerializer, UserCreateSerializer, UpdateUserSerializer, CustomTokenObtainPairSerializer
 from rest_framework.permissions import BasePermission
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 User = get_user_model()
+
+class CustomTokenObtainPairView(TokenObtainPairView):
+    serializer_class = CustomTokenObtainPairSerializer
 
 class IsOtherSuperUser(BasePermission):
     def has_permission(self, request, view):
@@ -24,30 +28,30 @@ class UserRegisterView(generics.CreateAPIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class UserLoginView(generics.GenericAPIView):
-    serializer_class = UserCreateSerializer
+# class UserLoginView(generics.GenericAPIView):
+#     serializer_class = UserCreateSerializer
 
-    def post(self, request):
-        email = request.data.get('email')
-        password = request.data.get('password')
+#     def post(self, request):
+#         email = request.data.get('email')
+#         password = request.data.get('password')
 
-        if not email or not password:
-            return Response({'error': 'Email y contraseña son requeridos'}, status=status.HTTP_400_BAD_REQUEST)
+#         if not email or not password:
+#             return Response({'error': 'Email y contraseña son requeridos'}, status=status.HTTP_400_BAD_REQUEST)
 
-        try:
-            user = User.objects.get(email=email)
-            if not user.is_active:
-                return Response({'error': 'Usuario inactivo'}, status=status.HTTP_400_BAD_REQUEST)
-            if not user.check_password(password):
-                return Response({'error': 'Contraseña incorrecta'}, status=status.HTTP_400_BAD_REQUEST)
+#         try:
+#             user = User.objects.get(email=email)
+#             if not user.is_active:
+#                 return Response({'error': 'Usuario inactivo'}, status=status.HTTP_400_BAD_REQUEST)
+#             if not user.check_password(password):
+#                 return Response({'error': 'Contraseña incorrecta'}, status=status.HTTP_400_BAD_REQUEST)
 
-            refresh = RefreshToken.for_user(user)
-            return Response({
-                'refresh': str(refresh),
-                'access': str(refresh.access_token),
-            })
-        except User.DoesNotExist:
-            return Response({'error': 'Usuario no encontrado'}, status=status.HTTP_404_NOT_FOUND)
+#             refresh = RefreshToken.for_user(user)
+#             return Response({
+#                 'refresh': str(refresh),
+#                 'access': str(refresh.access_token),
+#             })
+#         except User.DoesNotExist:
+#             return Response({'error': 'Usuario no encontrado'}, status=status.HTTP_404_NOT_FOUND)
         
 class UserListView(generics.ListAPIView):
     queryset = User.objects.all()

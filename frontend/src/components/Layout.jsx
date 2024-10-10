@@ -1,10 +1,11 @@
 import { Box, Button, Divider, Drawer } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
-import { logout } from '../services/auth';
+import { logout, getAccessToken } from '../services/auth';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import GroupIcon from '@mui/icons-material/Group';
 import LogoutIcon from '@mui/icons-material/Logout';
+import { jwtDecode } from 'jwt-decode';
 
 export default function Layout({ children }) {
   const navigate = useNavigate();
@@ -16,6 +17,20 @@ export default function Layout({ children }) {
     } catch (error) {
       console.error('Error durante el cierre de sesión:', error);
     }
+  };
+
+  const isAdmin = () => {
+    const token = getAccessToken();
+    if (token) {
+      try {
+        const decodedToken = jwtDecode(token);
+        return decodedToken.rol === 'administrador';
+      } catch (error) {
+        console.error('Error decoding token:', error);
+        return false;
+      }
+    }
+    return false;
   };
 
   return (
@@ -57,11 +72,16 @@ export default function Layout({ children }) {
             padding: '16px 0',
             gap: '16px',
           }}>
-          <Link to='/usersList'>
-            <Button variant='contained' color='primary' sx={{ width: '150px' }}>
-              Usuarios <GroupIcon />
-            </Button>
-          </Link>
+          {isAdmin() && (
+            <Link to='/usersList'>
+              <Button
+                variant='contained'
+                color='primary'
+                sx={{ width: '150px' }}>
+                Usuarios <GroupIcon />
+              </Button>
+            </Link>
+          )}
           <Link to='/'>
             <Button
               variant='contained'

@@ -43,7 +43,7 @@ export default function Login() {
       const loginSuccess = await login(email, password);
 
       if (loginSuccess) {
-        navigate('/usersList');
+        navigate('/products');
       } else {
         setSnackbarSeverity('error');
         setSnackbarMessage(loginSuccess.message);
