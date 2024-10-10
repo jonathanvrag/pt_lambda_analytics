@@ -6,5 +6,5 @@ urlpatterns = [
     path('metrics/', ProductsMetricsView.as_view(), name='products-metrics'),
     path('wishlist/', WishlistView.as_view(), name='wishlist'),
     path('wishlist/<int:user_id>/', WishlistView.as_view(), name='wishlist-list'),
-    path('wishlist/<int:id>/', WishlistView.as_view(), name='wishlist-delete'),
+    path('wishlist/delete/<int:id>/', WishlistView.as_view(), name='wishlist-delete'),
 ]

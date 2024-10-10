@@ -41,8 +41,7 @@ class WishlistView(APIView):
     def delete(self, request, id):
         try:
             articulo = Articulo.objects.get(pk=id)
+            articulo.delete() 
+            return Response({'message': 'Artículo eliminado de la lista de deseos.'}, status=status.HTTP_204_NO_CONTENT)
         except Articulo.DoesNotExist:
             return Response({'error': 'El artículo no existe.'}, status=status.HTTP_404_NOT_FOUND)
-
-        articulo.delete()
-        return Response({'message': 'Artículo eliminado de la lista de deseos.'}, status=status.HTTP_204_NO_CONTENT)

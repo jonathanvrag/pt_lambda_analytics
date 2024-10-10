@@ -23,7 +23,7 @@ export default function Layout({ children }) {
       sx={{
         height: '100vh',
         display: 'grid',
-        gridTemplateColumns: '1fr 5fr',
+        gridTemplateColumns: '1fr 6fr',
       }}>
       <Drawer anchor='left' open={true} variant='persistent'>
         <Box

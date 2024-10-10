@@ -1,10 +1,13 @@
 import { useEffect, useState } from 'react';
 import {
+  Alert,
   Box,
+  Button,
   CircularProgress,
   IconButton,
   InputAdornment,
   Paper,
+  Snackbar,
   TextField,
   Table,
   TableBody,
@@ -12,13 +15,14 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Tooltip,
   Typography,
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 import Layout from './Layout';
 import { getProducts, getProductMetrics } from '../services/products';
+import { addToWishlist } from '../services/wishList';
 import ProductMetricCard from './ProductMetricCard';
 
 export default function Products() {
@@ -27,6 +31,12 @@ export default function Products() {
   const [metrics, setMetrics] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [isAddingToWishlist, setIsAddingToWishlist] = useState(false);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarSeverity, setSnackbarSeverity] = useState('success');
+  const [wishlistError, setWishlistError] = useState(null);
+  const [isAddedToWishlist, setIsAddedToWishlist] = useState(false);
 
   const fetchProductsAndMetrics = async () => {
     setIsLoading(true);
@@ -37,9 +47,7 @@ export default function Products() {
       setProducts(fetchedProducts);
 
       if (fetchedProducts.length > 0) {
-        const fetchedMetrics = await getProductMetrics(
-          fetchedProducts
-        );
+        const fetchedMetrics = await getProductMetrics(fetchedProducts);
         setMetrics(fetchedMetrics);
       } else {
         setMetrics(null);
@@ -66,6 +74,39 @@ export default function Products() {
     };
   }, []);
 
+  useEffect(() => {
+    if (wishlistError) {
+      console.error('Error en el useEffect:', wishlistError);
+    }
+  }, [wishlistError]);
+
+  const handleAddToWishlist = product => {
+    setIsAddedToWishlist(true);
+
+    addToWishlist({
+      nombre: product.nombre,
+      image_url: product.image_url,
+      precio: product.precio,
+      url: product.url,
+    })
+      .then(response => {
+        console.log('Artículo añadido a la lista de deseos:', response);
+        setSnackbarMessage('Artículo añadido a la lista de deseos');
+        setSnackbarSeverity('success');
+        setSnackbarOpen(true);
+      })
+      .catch(error => {
+        console.error('Error al añadir a la lista de deseos:', error);
+        setWishlistError(error);
+        setSnackbarMessage('Error al añadir a la lista de deseos');
+        setSnackbarSeverity('error');
+        setSnackbarOpen(true);
+      })
+      .finally(() => {
+        setIsAddingToWishlist(false);
+        setIsAddedToWishlist(false);
+      });
+  };
   const handleChange = event => {
     setSearchTerm(event.target.value);
   };
@@ -79,6 +120,19 @@ export default function Products() {
     if (event.key === 'Enter') {
       handleSearch();
     }
+  };
+
+  useEffect(() => {
+    if (wishlistError) {
+      console.error('Error en el useEffect:', wishlistError);
+    }
+  }, [wishlistError]);
+
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setSnackbarOpen(false);
   };
 
   const handleCopy = url => {
@@ -140,10 +194,10 @@ export default function Products() {
         {!isLoading && !error && products.length > 0 && (
           <Box
             sx={{
-              width: '76vw',
+              width: '79vw',
               height: '73vh',
               display: 'grid',
-              gridTemplateColumns: '1fr 2fr',
+              gridTemplateColumns: '1fr 3fr',
               gap: '1vw',
             }}>
             <Box
@@ -156,6 +210,7 @@ export default function Products() {
                 backdropFilter: 'blur(10px)',
                 boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)',
                 borderRadius: '10px',
+                width: '20vw',
               }}>
               {metrics && metrics.articulo_menor_precio && (
                 <ProductMetricCard
@@ -243,6 +298,9 @@ export default function Products() {
                     <TableCell align='left' sx={{ fontWeight: 'bold' }}>
                       URL
                     </TableCell>
+                    <TableCell align='left' sx={{ fontWeight: 'bold' }}>
+                      Agregar a favoritos
+                    </TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -260,31 +318,53 @@ export default function Products() {
                         {!product.rating ? '---' : product.rating}
                       </TableCell>
                       <TableCell>
-                        {product.image_url.length > 20
-                          ? `${product.image_url.substring(0, 20)}...`
-                          : product.image_url}
-                        <Tooltip title='Copiar URL'>
+                        <Box display='flex' justifyContent='space-between'>
+                          {product.image_url.length > 20
+                            ? `${product.image_url.substring(0, 20)}...`
+                            : product.image_url}
                           <IconButton
                             onClick={() => handleCopy(product.image_url)}>
-                            <ContentCopyIcon />
+                            <OpenInNewIcon />
                           </IconButton>
-                        </Tooltip>
+                        </Box>
                       </TableCell>
                       <TableCell>
-                        {product.url.length > 20
-                          ? `${product.url.substring(0, 20)}...`
-                          : product.url}
-                        <Tooltip title='Copiar URL'>
+                        <Box display='flex' justifyContent='space-between'>
+                          {product.url.length > 20
+                            ? `${product.url.substring(0, 20)}...`
+                            : product.url}
                           <IconButton onClick={() => handleCopy(product.url)}>
-                            <ContentCopyIcon />
+                            <OpenInNewIcon />
                           </IconButton>
-                        </Tooltip>
+                        </Box>
+                      </TableCell>
+                      <TableCell>
+                        <Button
+                          sx={{ margin: '5px 0 0 0' }}
+                          variant='contained'
+                          color='error'
+                          onClick={() => handleAddToWishlist(product)}
+                          disabled={isAddingToWishlist}>
+                          {isAddingToWishlist ? (
+                            'Añadiendo...'
+                          ) : (
+                            <FavoriteIcon />
+                          )}
+                        </Button>
                       </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
               </Table>
             </TableContainer>
+            <Snackbar
+              open={snackbarOpen}
+              autoHideDuration={6000}
+              onClose={handleSnackbarClose}>
+              <Alert onClose={handleSnackbarClose} severity={snackbarSeverity}>
+                {snackbarMessage}
+              </Alert>
+            </Snackbar>
           </Box>
         )}
       </Box>
