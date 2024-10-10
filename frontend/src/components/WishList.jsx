@@ -48,23 +48,23 @@ export default function WishList() {
     fetchWishlist();
   }, []);
 
-  const handleCopy = (url) => {
+  const handleCopy = url => {
     navigator.clipboard
       .writeText(url)
       .then(() => {
         console.log('URL copiada al portapapeles:', url);
       })
-      .catch((error) => {
+      .catch(error => {
         console.error('Error al copiar la URL:', error);
       });
   };
 
-  const handleDeleteItem = async (itemId) => {
+  const handleDeleteItem = async itemId => {
     try {
       const success = await deleteWishlistItem(itemId);
       if (success) {
-        setWishlist((prevWishlist) =>
-          prevWishlist.filter((item) => item.id !== itemId)
+        setWishlist(prevWishlist =>
+          prevWishlist.filter(item => item.id !== itemId)
         );
         setSnackbarMessage('El articulo ha sido eliminado con exito!');
         setSnackbarSeverity('success');
@@ -107,7 +107,7 @@ export default function WishList() {
         )}
 
         {error && (
-          <Typography variant="body1" color="error" align="center" mt={2}>
+          <Typography variant='body1' color='error' align='center' mt={2}>
             Error al cargar la lista de deseos. Por favor, inténtalo de nuevo
             más tarde.
           </Typography>
@@ -127,19 +127,19 @@ export default function WishList() {
             <Table stickyHeader>
               <TableHead>
                 <TableRow>
-                  <TableCell align="left" sx={{ fontWeight: 'bold' }}>
+                  <TableCell align='left' sx={{ fontWeight: 'bold' }}>
                     Nombre
                   </TableCell>
-                  <TableCell align="left" sx={{ fontWeight: 'bold' }}>
+                  <TableCell align='left' sx={{ fontWeight: 'bold' }}>
                     Imagen
                   </TableCell>
-                  <TableCell align="left" sx={{ fontWeight: 'bold' }}>
+                  <TableCell align='left' sx={{ fontWeight: 'bold' }}>
                     Precio
                   </TableCell>
-                  <TableCell align="left" sx={{ fontWeight: 'bold' }}>
+                  <TableCell align='left' sx={{ fontWeight: 'bold' }}>
                     URL
                   </TableCell>
-                  <TableCell align="left" sx={{ fontWeight: 'bold' }}>
+                  <TableCell align='left' sx={{ fontWeight: 'bold' }}>
                     Acciones
                   </TableCell>
                 </TableRow>
@@ -166,13 +166,14 @@ export default function WishList() {
                         : item.url_mercadolibre}
                     </TableCell>
                     <TableCell>
-                      <Tooltip title="Copiar URL">
-                        <IconButton onClick={() => handleCopy(item.url_mercadolibre)}>
+                      <Tooltip title='Copiar URL'>
+                        <IconButton
+                          onClick={() => handleCopy(item.url_mercadolibre)}>
                           <ContentCopyIcon />
                         </IconButton>
                       </Tooltip>
                       <Button
-                        variant="contained"
+                        variant='contained'
                         sx={{ margin: '0 5px' }}
                         onClick={() => {
                           window.open(item.url_mercadolibre, '_blank');
@@ -180,8 +181,8 @@ export default function WishList() {
                         <OpenInNewIcon />
                       </Button>
                       <Button
-                        variant="contained"
-                        color="error"
+                        variant='contained'
+                        color='error'
                         onClick={() => handleDeleteItem(item.id_articulo)}>
                         <DeleteIcon />
                       </Button>
@@ -194,7 +195,11 @@ export default function WishList() {
         )}
 
         {!isLoading && !error && wishlist.length === 0 && (
-          <Typography variant="body1" align="center" mt={2} sx={{ fontStyle: 'italic' }}>
+          <Typography
+            variant='body1'
+            align='center'
+            mt={2}
+            sx={{ fontStyle: 'italic' }}>
             No hay artículos en tu lista de deseos.
           </Typography>
         )}

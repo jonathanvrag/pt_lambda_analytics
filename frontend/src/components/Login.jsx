@@ -11,10 +11,10 @@ import {
   Tab,
   Tabs,
   TextField,
-  Typography,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { login, register } from '../services/auth';
+import logo from '../assets/logo.png';
 
 const isValidEmail = email => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -137,7 +137,6 @@ export default function Login() {
         sx={{
           height: '100vh',
           width: '100vw',
-          backgroundColor: '#5e2129',
           display: 'grid',
           gridTemplateColumns: '1fr 1fr',
         }}>
@@ -147,7 +146,7 @@ export default function Login() {
             justifyContent: 'center',
             alignItems: 'center',
           }}>
-          <Typography variant='h1'>Login</Typography>
+            <img src={logo} alt="logo" />
         </Box>
         <Box
           sx={{
@@ -163,9 +162,11 @@ export default function Login() {
               flexDirection: 'column',
               justifyContent: 'center',
               alignItems: 'center',
-              backgroundColor: 'white',
-              borderRadius: '36px',
-              padding: '2rem',
+              backgroundColor: 'rgba(255, 255, 255, 0.5)',
+              backdropFilter: 'blur(10px)',
+              boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)',
+              borderRadius: '10px',
+              padding: '20px',
             }}>
             <Tabs value={activeTab} onChange={handleChangeTab} centered>
               <Tab label='Login' />

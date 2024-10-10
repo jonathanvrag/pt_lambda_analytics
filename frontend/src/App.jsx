@@ -1,7 +1,7 @@
 import './App.css';
 import { Routes, Route } from 'react-router-dom';
 import { Box } from '@mui/material';
-import Login from './components/login';
+import Login from './components/Login';
 import UserList from './components/UserList';
 import Products from './components/Products';
 import WishList from './components/WishList';

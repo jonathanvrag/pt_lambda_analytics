@@ -116,8 +116,11 @@ export default function FormEditUser({ user, onClose }) {
         Editar Usuario
       </Typography>
       {error && (
-        <Snackbar open={!!error} autoHideDuration={6000} onClose={() => setError(null)}>
-          <Alert onClose={() => setError(null)} severity="error">
+        <Snackbar
+          open={!!error}
+          autoHideDuration={6000}
+          onClose={() => setError(null)}>
+          <Alert onClose={() => setError(null)} severity='error'>
             {error}
           </Alert>
         </Snackbar>
@@ -163,7 +166,11 @@ export default function FormEditUser({ user, onClose }) {
             pattern: '[0-9]*',
           }}
           error={formData.telefono.length > 0 && formData.telefono.length < 7}
-          helperText={formData.telefono.length > 0 && formData.telefono.length < 7 ? 'El teléfono debe tener al menos 7 números.' : ''}
+          helperText={
+            formData.telefono.length > 0 && formData.telefono.length < 7
+              ? 'El teléfono debe tener al menos 7 números.'
+              : ''
+          }
         />
         <FormControl fullWidth margin='normal'>
           <InputLabel id='genero-label'>Género</InputLabel>
