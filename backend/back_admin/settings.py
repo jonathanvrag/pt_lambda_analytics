@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'users',
     "corsheaders",
     'products',
+    'drf_yasg',
 ]
 
 REST_FRAMEWORK = {
