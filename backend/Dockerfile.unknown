@@ -1,0 +1,20 @@
+# Usa una imagen oficial de Python como base
+FROM python:3.11-slim
+
+# Establece el directorio de trabajo dentro del contenedor
+WORKDIR /app-backend
+
+# Copia el archivo requirements.txt para instalar las dependencias
+COPY requirements.txt /app-backend/
+
+# Instala las dependencias del proyecto
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copia todo el código fuente del proyecto al contenedor
+COPY . /app-backend/
+
+# Exponer el puerto por defecto en el que corre Django (8000)
+EXPOSE 8000
+
+# Ejecuta las migraciones y el servidor de desarrollo de Django
+CMD ["sh", "-c", "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"]
